@@ -1,22 +1,5 @@
-<?php
-require("engine.php");
-$engine = new Game_Engine("Game Name", "mainbg.jpg", "logo.png");
-$engine->Run();
+This is a simple game engine written in PHP.
 
-/*
- * Below we are going to create our game screens
- * /
+All you have to do is include engine.php
 
-if($engine->screen=="main"){
-	$engine->Game_Logo("custom|top:40;left:32%;position:absolute;margin:30px;");
-	$engine->Menu("Play=play,About=about", "middle-center");
-	$engine->playSound("beyond");
-	die();
-} else if($engine->screen=="play"){
-	$engine->MiniMenu("Main=main", "top-left");
-	$engine->Text("this is the play screen");
-	die();
-} else if($engine->screen=="about"){
-	$engine->MiniMenu("Main=main", "top-left");
-	$engine->Text("A quick game made with a simple game engine", "custom|top:100;left:20%;position:absolute;margin:30px;");
-}
+and create the engine object, from there you can render game screens and add media to the screens
