@@ -1,18 +1,9 @@
 <?php
-class Game_Engine {
+class Engine {
 
-	var $game_name;
-	var $theme_song;
-	var $screen;
-	var $main_screen_bg;
-	var $game_logo;
-	
-	function __construct($gname=NULL, $main_screen_bg=NULL, $game_logo=NULL)
+	function construct() 
 	{
-		$this->game_name = $gname;
-		$this->screen = $_GET[screen];
-		$this->main_screen_bg = "sources/backgrounds/".$main_screen_bg;
-		$this->game_logo = "sources/images/".$game_logo;
+		var_dump($GLOBALS);
 	}
 	
 	function Run()
@@ -92,7 +83,7 @@ class Game_Engine {
 		<script>
 		function playSound(soundfile) 
 		{
-			document.getElementById("dummy").innerHTML="<audio autoplay='autoplay'><source src='sources/sounds/"+soundfile+".wav' type='audio/wav' /></audio>";
+			document.getElementById("dummy").innerHTML="<audio autoplay='autoplay'><source src='<?=$this->config['source_path']?>/sounds/"+soundfile+".wav' type='audio/wav' /></audio>";
 		}
 		function load_view(view)
 		{
@@ -104,10 +95,10 @@ class Game_Engine {
 		<?
 	}
 	
-	function Game_Logo($position)
+	function Image($img, $position = 'top-left')
 	{
 		$pos = $this->Position_Handler($position);
-		echo "<img src='$this->game_logo' style='$pos'>";
+		echo "<img src='".$this->config['source_path']."/images/$img' style='$pos'>";
 	}
 	
 	function Canvas($html)
@@ -115,27 +106,27 @@ class Game_Engine {
 		echo "<div id='canvas'>$html</div>";
 	}
 	
-	function Text($text, $position="custom|top:100;left:20%;position:absolute;margin:30px;")
+	function Text($text, $position = "custom=top:100;left:20%;position:absolute;margin:30px;")
 	{
 		$pos = $this->Position_Handler($position);
 		echo "<p class='text-block' style='$pos'>$text</p>";
 	}
 	
-	function playSound($src, $controls=false)
+	function playSound($src, $controls = false)
 	{
 		if($controls){
 			$audio = "<audio loop='loop' controls='controls' autoplay='autoplay'>\n";
 		} else {
 			$audio = "<audio loop='loop' autoplay='autoplay'>\n";
 		}
-		$audio .= "<source src='sources/sounds/$src.ogg' type='audio/ogg' />\n";
-		$audio .= "<source src='sources/sounds/$src.mp3' type='audio/mp3' />\n";
+		$audio .= "<source src='".$this->config['source_path']."/sounds/$src.ogg' type='audio/ogg' />\n";
+		$audio .= "<source src='".$this->config['source_path']."/sounds/$src.mp3' type='audio/mp3' />\n";
 		$audio .= "</audio>";
 		echo $audio;
 		return $audio;
 	}
 	
-	function MiniMenu($items, $position="top-center")
+	function MiniMenu($items, $position = 'top-left')
 	{
 		$items = explode(",", $items);
 		$pos = $this->Position_Handler($position);
@@ -149,32 +140,32 @@ class Game_Engine {
 	
 	function Position_Handler($position)
 	{
-		$custom = strpos($position, "|");
+		$custom = strpos($position, "=");
 		if($custom===false) {
 			$custom = false;
 		} else {
-			$position = explode("|", $position);
+			$position = explode("=", $position);
 			$css = $position[1];
 			$position = "custom";
 		}
 		if($position=="top-left"){
-			$pos = "top:0;left:0;position:absolute;margin:30px;";
+			$pos = "top:0;left:0;position:absolute;";
 		} else if($position=="top-center"){
-			$pos = "top:0;left:37%;position:absolute;margin:30px;";
+			$pos = "top:0;left:37%;position:absolute;";
 		} else if($position=="top-right"){
-			$pos = "top:0;right:0;position:absolute;margin:30px;";
+			$pos = "top:0;right:0;position:absolute;";
 		} else if($position=="middle-left"){
-			$pos = "top:25%;left:0;position:absolute;margin:30px;";
+			$pos = "top:25%;left:0;position:absolute;";
 		} else if($position=="middle-center"){
-			$pos = "top:25%;left:37%;position:absolute;margin:30px;";
+			$pos = "top:25%;left:37%;position:absolute;";
 		} else if($position=="middle-right"){
-			$pos = "top:25%;right:0;position:absolute;margin:30px;";
+			$pos = "top:25%;right:0;position:absolute;";
 		} else if($position=="bottom-right"){
-			$pos = "bottom:0;right:0;position:absolute;margin:30px;";
+			$pos = "bottom:0;right:0;position:absolute;";
 		} else if($position=="bottom-center"){
-			$pos = "bottom:0;left:37%;position:absolute;margin:30px;";
+			$pos = "bottom:0;left:37%;position:absolute;";
 		} else if($position=="bottom-left"){
-			$pos = "bottom:0;left:0;position:absolute;margin:30px;";
+			$pos = "bottom:0;left:0;position:absolute;";
 		} else if($position=="custom"){
 			$pos = $css;
 		}
@@ -191,5 +182,10 @@ class Game_Engine {
 			?><li class="menu_item" onmouseover="playSound('boing2');" onclick="load_view('<?php echo $nav_item[1]; ?>');"><?php echo $nav_item[0]; ?></li><?
 		}
 		echo "</div>";
+	}
+	
+	function Alert($message, $type = 'info')
+	{
+		echo $message;
 	}
 }
